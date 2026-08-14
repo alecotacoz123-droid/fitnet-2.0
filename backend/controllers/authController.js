@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User, Follower, Notification } = require('../models');
+const { User, Follower, Notification, FitnessProfile, TrainingSession } = require('../models');
 const { logActivity } = require('../utils/logger');
 const { createNotification } = require('../utils/notifier');
 require('dotenv').config();
@@ -295,6 +295,13 @@ const getProfile = async (req, res) => {
 
     const followersCount = await Follower.count({ where: { following_id: user.id } });
     const followingCount = await Follower.count({ where: { follower_id: user.id } });
+    
+    const fitnessProfile = await FitnessProfile.findOne({ where: { user_id: user.id } });
+    const trainingSessions = await TrainingSession.findAll({
+      where: { user_id: user.id },
+      order: [['date', 'DESC']],
+      limit: 10
+    });
 
     return res.json({
       id: user.id,
@@ -306,7 +313,9 @@ const getProfile = async (req, res) => {
       profile_picture: user.profile_picture,
       preferences: user.preferences,
       followersCount,
-      followingCount
+      followingCount,
+      fitnessProfile,
+      trainingSessions
     });
   } catch (error) {
     console.error('Get Profile Error:', error);
@@ -338,6 +347,13 @@ const getPublicProfile = async (req, res) => {
       isFollowing = !!followRecord;
     }
 
+    const fitnessProfile = await FitnessProfile.findOne({ where: { user_id: user.id } });
+    const trainingSessions = await TrainingSession.findAll({
+      where: { user_id: user.id },
+      order: [['date', 'DESC']],
+      limit: 10
+    });
+
     return res.json({
       id: user.id,
       username: user.username,
@@ -348,7 +364,9 @@ const getPublicProfile = async (req, res) => {
       created_at: user.created_at,
       followersCount,
       followingCount,
-      isFollowing
+      isFollowing,
+      fitnessProfile,
+      trainingSessions
     });
   } catch (error) {
     console.error('Get Public Profile Error:', error);

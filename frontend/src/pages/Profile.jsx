@@ -543,6 +543,47 @@ const Profile = () => {
         {/* ── LEVEL ROADMAP ─────────────────────────────────────── */}
         {fitnessProfile && <LevelRoadmap fitnessProfile={fitnessProfile} />}
 
+        {/* ── RECENT TRAINING SESSIONS ─────────────────────────── */}
+        {profile?.trainingSessions && profile.trainingSessions.length > 0 && (
+          <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm mb-6">
+            <h2 className="text-base font-black text-slate-900 mb-4 flex items-center space-x-2">
+              <Activity className="w-4 h-4 text-blue-500" />
+              <span>Historial de Ejercicios Realizados (Validados por IA)</span>
+              <span className="text-xs text-slate-400 font-medium ml-1">({profile.trainingSessions.length})</span>
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="text-slate-400 font-black tracking-wider uppercase text-[9px] border-b border-slate-100">
+                    <th className="pb-3">Fecha</th>
+                    <th className="pb-3">Ejercicio</th>
+                    <th className="pb-3">Repeticiones</th>
+                    <th className="pb-3">Duración</th>
+                    <th className="pb-3">Calorías</th>
+                    <th className="pb-3 text-right">Precisión IA</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50 text-slate-600">
+                  {profile.trainingSessions.map((session) => (
+                    <tr key={session.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="py-3 font-medium text-slate-500">
+                        {new Date(session.date || session.createdAt).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                      <td className="py-3 font-bold text-slate-900 capitalize">{session.exercise_type}</td>
+                      <td className="py-3 font-semibold">{session.repetitions} reps</td>
+                      <td className="py-3 font-medium">{Math.floor(session.duration_seconds / 60)}m {session.duration_seconds % 60}s</td>
+                      <td className="py-3 font-medium text-orange-600">+{session.calories_burned} kcal</td>
+                      <td className="py-3 text-right font-black text-emerald-600">
+                        {session.accuracy_percentage ? `${session.accuracy_percentage.toFixed(0)}%` : '100%'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* ── POSTS ────────────────────────────────────────────── */}
         <div>
           <h2 className="text-base font-black text-slate-900 mb-4 flex items-center space-x-2">

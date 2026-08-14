@@ -1,5 +1,5 @@
 const { 
-  sequelize, User, Group, GroupMember, Post, Comment, Like, ActivityLog, FitnessProfile, CalendarEvent, SurveyResponse, Notification 
+  sequelize, User, Group, GroupMember, Post, Comment, Like, ActivityLog, FitnessProfile, CalendarEvent, SurveyResponse, Notification, TrainingSession 
 } = require('./models');
 const bcrypt = require('bcryptjs');
 
@@ -48,8 +48,8 @@ const postContentPool = [
   { 
     title: "¡Sentadilla de hoy superada!", 
     content: "Logré romper récord personal en sentadilla profunda. Técnica impecable gracias al analizador de postura IA.", 
-    media_url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600",
-    media_type: "image",
+    media_url: "https://assets.mixkit.co/videos/preview/mixkit-heavy-barbell-being-lifted-by-athlete-42172-large.mp4",
+    media_type: "video",
     tags: { exercise_type: "Sentadilla", muscle_group: "Cuádriceps", intensity: "Alta" } 
   },
   { 
@@ -62,15 +62,15 @@ const postContentPool = [
   { 
     title: "Cardio al aire libre en Timbío", 
     content: "Excelente trote de 5km hoy por la variante. Manteniendo activa la racha.", 
-    media_url: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600",
-    media_type: "image",
+    media_url: "https://assets.mixkit.co/videos/preview/mixkit-athlete-resting-after-running-42170-large.mp4",
+    media_type: "video",
     tags: { exercise_type: "Cardio", muscle_group: "General", intensity: "Media" } 
   },
   { 
     title: "Técnica de flexiones corregida", 
     content: "El esqueleto de IA me ayudó a alinear bien los codos para proteger mis hombros.", 
-    media_url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600",
-    media_type: "image",
+    media_url: "https://assets.mixkit.co/videos/preview/mixkit-man-doing-pushups-in-the-gym-42174-large.mp4",
+    media_type: "video",
     tags: { exercise_type: "Flexiones", muscle_group: "Pecho", intensity: "Alta" } 
   },
   { 
@@ -107,6 +107,7 @@ async function seed() {
     await Like.destroy({ where: {} });
     await Comment.destroy({ where: {} });
     await Post.destroy({ where: {} });
+    await TrainingSession.destroy({ where: {} });
     await ActivityLog.destroy({ where: {} });
     
     // Find or create admin to be group creator
@@ -209,6 +210,29 @@ async function seed() {
         fitnessProfile.current_streak = streak;
         fitnessProfile.total_workouts = totalWorkouts;
         await fitnessProfile.save();
+      }
+
+      // 3.5 Create completed training sessions for this user to populate their profile table
+      const exercisesList = ['sentadilla', 'flexiones', 'cardio', 'pesas', 'plancha'];
+      const numSessions = Math.floor(Math.random() * 3) + 3; // 3 to 5 sessions
+      for (let s = 0; s < numSessions; s++) {
+        const exercise_type = exercisesList[Math.floor(Math.random() * exercisesList.length)];
+        const repetitions = Math.floor(Math.random() * 15) + 10;
+        const duration_seconds = Math.floor(Math.random() * 60) + 30;
+        const calories_burned = Math.floor(repetitions * 1.5 + duration_seconds * 0.1);
+        const accuracy_percentage = parseFloat((Math.random() * 15 + 83).toFixed(1));
+        const sessionDate = new Date();
+        sessionDate.setDate(sessionDate.getDate() - s); // spread them across recent days
+        
+        await TrainingSession.create({
+          user_id: user.id,
+          exercise_type,
+          repetitions,
+          duration_seconds,
+          calories_burned,
+          accuracy_percentage,
+          date: sessionDate
+        });
       }
 
       // 4. Enroll in the 3 groups (Approved Members)
