@@ -48,7 +48,7 @@ const postContentPool = [
   { 
     title: "¡Sentadilla de hoy superada!", 
     content: "Logré romper récord personal en sentadilla profunda. Técnica impecable gracias al analizador de postura IA.", 
-    media_url: "https://assets.mixkit.co/videos/preview/mixkit-heavy-barbell-being-lifted-by-athlete-42172-large.mp4",
+    media_url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
     media_type: "video",
     tags: { exercise_type: "Sentadilla", muscle_group: "Cuádriceps", intensity: "Alta" } 
   },
@@ -62,14 +62,14 @@ const postContentPool = [
   { 
     title: "Cardio al aire libre en Timbío", 
     content: "Excelente trote de 5km hoy por la variante. Manteniendo activa la racha.", 
-    media_url: "https://assets.mixkit.co/videos/preview/mixkit-athlete-resting-after-running-42170-large.mp4",
+    media_url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
     media_type: "video",
     tags: { exercise_type: "Cardio", muscle_group: "General", intensity: "Media" } 
   },
   { 
     title: "Técnica de flexiones corregida", 
     content: "El esqueleto de IA me ayudó a alinear bien los codos para proteger mis hombros.", 
-    media_url: "https://assets.mixkit.co/videos/preview/mixkit-man-doing-pushups-in-the-gym-42174-large.mp4",
+    media_url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
     media_type: "video",
     tags: { exercise_type: "Flexiones", muscle_group: "Pecho", intensity: "Alta" } 
   },
