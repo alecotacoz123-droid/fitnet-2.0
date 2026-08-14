@@ -1,8 +1,6 @@
 @echo off
 title FitNet Project Runner
-echo ========================================================
-echo 🔥 Levantando Proyecto FitNet - Red Social Fitness con IA 🔥
-echo ========================================================
+echo  Levantando Proyecto FitNet - Red Social Fitness con IA 
 
 echo.
 echo [1/3] Iniciando Microservicio de IA (Python en Puerto 5000)...
@@ -17,14 +15,12 @@ echo [3/3] Iniciando Servidor de Desarrollo Frontend (Vite/React en Puerto 5173)
 start "FitNet - Frontend React" cmd /k "cd frontend && npm run dev"
 
 echo.
-echo ========================================================
-echo 🎉 ¡Prototipo de FitNet en ejecución! 🎉
+echo  ¡Prototipo de FitNet en ejecución! 
 echo.
-echo 💻 Interfaz Web: http://localhost:5173
-echo 💻 API Backend: http://localhost:4000/api
-echo 💻 Microservicio IA: http://localhost:5000/health
+echo  Interfaz Web: http://localhost:5173
+echo  API Backend: http://localhost:4000/api
+echo  Microservicio IA: http://localhost:5000/health
 echo.
 echo Revisa las terminales independientes que se han abierto.
 echo Presiona Ctrl+C en cada terminal para apagar los servicios.
-echo ========================================================
 pause
