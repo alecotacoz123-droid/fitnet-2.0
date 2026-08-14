@@ -1,5 +1,5 @@
 const { 
-  sequelize, User, Group, GroupMember, Post, Comment, Like, ActivityLog, FitnessProfile, CalendarEvent, SurveyResponse 
+  sequelize, User, Group, GroupMember, Post, Comment, Like, ActivityLog, FitnessProfile, CalendarEvent, SurveyResponse, Notification 
 } = require('./models');
 const bcrypt = require('bcryptjs');
 
@@ -45,11 +45,41 @@ const biosPool = [
 ];
 
 const postContentPool = [
-  { title: "¡Sentadilla de hoy superada!", content: "Logré romper récord personal en sentadilla profunda. Técnica impecable gracias al analizador de postura IA.", tags: { exercise_type: "Sentadilla", muscle_group: "Cuádriceps", intensity: "Alta" } },
-  { title: "Rutina de hombros terminada", content: "Dándole duro al entrenamiento militar para fuerza general. ¡Sintiendo el progreso!", tags: { exercise_type: "Pesas", muscle_group: "Hombros", intensity: "Media" } },
-  { title: "Cardio al aire libre en Timbío", content: "Excelente trote de 5km hoy por la variante. Manteniendo activa la racha.", tags: { exercise_type: "Cardio", muscle_group: "General", intensity: "Media" } },
-  { title: "Técnica de flexiones corregida", content: "El esqueleto de IA me ayudó a alinear bien los codos para proteger mis hombros.", tags: { exercise_type: "Flexiones", muscle_group: "Pecho", intensity: "Alta" } },
-  { title: "Planificando la semana", content: "El Coach de FitNet me armó una rutina tremenda para esta semana de hipertrofia. ¡A darle!", tags: { exercise_type: "Planificacion", muscle_group: "General", intensity: "Baja" } }
+  { 
+    title: "¡Sentadilla de hoy superada!", 
+    content: "Logré romper récord personal en sentadilla profunda. Técnica impecable gracias al analizador de postura IA.", 
+    media_url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600",
+    media_type: "image",
+    tags: { exercise_type: "Sentadilla", muscle_group: "Cuádriceps", intensity: "Alta" } 
+  },
+  { 
+    title: "Rutina de hombros terminada", 
+    content: "Dándole duro al entrenamiento militar para fuerza general. ¡Sintiendo el progreso!", 
+    media_url: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600",
+    media_type: "image",
+    tags: { exercise_type: "Pesas", muscle_group: "Hombros", intensity: "Media" } 
+  },
+  { 
+    title: "Cardio al aire libre en Timbío", 
+    content: "Excelente trote de 5km hoy por la variante. Manteniendo activa la racha.", 
+    media_url: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600",
+    media_type: "image",
+    tags: { exercise_type: "Cardio", muscle_group: "General", intensity: "Media" } 
+  },
+  { 
+    title: "Técnica de flexiones corregida", 
+    content: "El esqueleto de IA me ayudó a alinear bien los codos para proteger mis hombros.", 
+    media_url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600",
+    media_type: "image",
+    tags: { exercise_type: "Flexiones", muscle_group: "Pecho", intensity: "Alta" } 
+  },
+  { 
+    title: "Planificando la semana", 
+    content: "El Coach de FitNet me armó una rutina tremenda para esta semana de hipertrofia. ¡A darle!", 
+    media_url: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600",
+    media_type: "image",
+    tags: { exercise_type: "Planificacion", muscle_group: "General", intensity: "Baja" } 
+  }
 ];
 
 const commentsPool = [
@@ -70,6 +100,14 @@ async function seed() {
     // 1. Ensure we have an Admin and standard password
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash('admin123', salt);
+
+    // Clean old posts, comments, likes, and activity logs to keep everything clean and professional
+    console.log("Limpiando antiguas publicaciones e interacciones...");
+    await Notification.destroy({ where: {} });
+    await Like.destroy({ where: {} });
+    await Comment.destroy({ where: {} });
+    await Post.destroy({ where: {} });
+    await ActivityLog.destroy({ where: {} });
     
     // Find or create admin to be group creator
     let admin = await User.findOne({ where: { role: 'admin' } });
@@ -198,10 +236,10 @@ async function seed() {
       
       const newPost = await Post.create({
         user_id: randomUser.id,
-        title: postTemplate.title + ` (Piloto #${i + 1})`,
+        title: postTemplate.title,
         content: postTemplate.content,
-        media_url: '',
-        media_type: 'none',
+        media_url: postTemplate.media_url,
+        media_type: postTemplate.media_type,
         ai_tags: postTemplate.tags
       });
       posts.push(newPost);
