@@ -249,7 +249,7 @@ const AdminPanel = () => {
                     </div>
                   </td>
                   <td className="py-4 px-6 font-medium">{u.email}</td>
-                  <td className="py-4 px-6 text-xs font-medium text-slate-500">{new Date(u.created_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                  <td className="py-4 px-6 text-xs font-medium text-slate-500">{new Date(u.createdAt || u.created_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
                   <td className="py-4 px-6">
                     <select
                       value={u.role}
@@ -312,8 +312,8 @@ const AdminPanel = () => {
               </div>
 
               <div className="text-[10px] font-semibold text-slate-400 shrink-0 text-right">
-                <p>{new Date(log.created_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })}</p>
-                <p>{new Date(log.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</p>
+                <p>{new Date(log.createdAt || log.created_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })}</p>
+                <p>{new Date(log.createdAt || log.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</p>
               </div>
             </div>
           ))}
