@@ -19,6 +19,7 @@ build/
 
 # Database and uploaded media (do not upload large files or database state to git)
 database/*.sqlite
+database/backups/*
 backend/uploads/*
 !backend/uploads/.gitkeep
 
